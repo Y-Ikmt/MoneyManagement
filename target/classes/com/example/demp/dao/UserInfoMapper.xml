@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demp.dao.UserInfoMapper">
+    <!-- 主キー検索 -->
+    <select id="findUserData" resultType="com.example.demp.entity.UserInfo">
+        SELECT * FROM user WHERE userid = #{id}
+    </select>
+    
+    <!-- お金増加 -->
+    <update id="inclease">
+        UPDATE user SET shojikin = shojikin + #{money} WHERE userid = #{id}
+    </update>
+    
+    <update id="updateMokuhyou">
+    	UPDATE user SET mokuhyou = #{mokuhyouKingaku}
+    </update>
+</mapper>

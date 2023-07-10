@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>お金かんりすべ</title>
+</head>
+<body>
+	<h1>収支履歴</h1>
+	<a th:href="@{/}">TOPへ</a>
+	<div>
+		<form th:action="@{/paymentSearch}" th:object="${paymentSearchRequest}" method="post">
+			<input type="hidden" name="userId">
+			<input type="date" name="startDate" th:value="${startDate}">
+			 ～ 
+			<input type="date" name="endDate" th:value="${endDate}">
+			<br/>
+			<input type="checkbox" name="plusFlg"><label for="plusflg" >増えたもの</label>
+			<input type="checkbox" name="minusFlg"><label for="minusflg">減ったもの</label>
+			<br/>
+			<input type="submit" value="検索"/>
+		</form>
+	</div>
+	
+    <div th:if="${paymentInfo}">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <!--<th>ユーザID</th>
+                    <th>seq</th>-->
+                    <th>収支理由</th>
+                    <th>収支金額</th>
+                    <th>日時</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="paymentInfo : ${paymentInfo}" th:object="${paymentInfo}" class="align-middle">
+                    <!--<td th:text="*{userid}"></td>
+                    <td th:text="*{seq}"></td>-->
+                    <td th:text="*{paymokuteki}"></td>
+                    <td th:text="*{paymoney}"></td>
+                    <td th:text="*{paydate}"></td>
+                    <td>
+                        <!--<a th:href="@{/user/{id}/delete(id=*{id})}" class="btn btn-secondary">削除</a>-->
+						<a th:href="@{/paymentDelete(value1=*{userid},value2=*{seq})}">削除</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>お金かんりすべ</title>
+</head>
+<body>
+	<h1>あなたのお金情報</h1>
+	<a th:href="@{/mokuhyou(value=*{userInfo.mokuhyou})}">目標設定</a>
+	<h1><span th:text="${userInfo.userid}"></span></h1>
+	<h1><span th:text="${userInfo.name}"></span></h1>
+	<h1><span th:text="${userInfo.password}"></span></h1>
+	<h1><span th:text="${userInfo.shojikin}"></span>/<span th:text="${userInfo.mokuhyou}"></span></h1>
+
+	<a th:href="@{/history}" th:text="履歴">履歴</a>
+
+    <form th:action="@{/increase}" method="post">
+        <div>
+			<label>いくら？</label>
+            <input type="text" name="money"/>
+        </div>
+        <div>
+			<label>理由は？</label>
+            <input type="text" name="reason"/>
+        </div>
+        <br />
+        <div>
+			<label>どっち？</label>
+			<select name="kbn">
+			<option value="up">増えた</option>
+			<option value="down">減った</option>
+			</select>
+        </div>
+        <br />
+        <div>
+            <input type="submit" value="反映"/>
+        </div>
+        <br />
+    </form>
+</body>
+</html>
