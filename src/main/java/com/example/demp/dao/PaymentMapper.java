@@ -11,14 +11,14 @@ import com.example.demp.entity.PaymentInfo;
 public interface PaymentMapper {
 	
 	//お金増やす
-	void insert(Long id, int money, String reason);
+	void insert(String id, int money, String reason);
 	
 	//収支履歴全検索
-	List<PaymentInfo> selectAll(Long id);
+	List<PaymentInfo> selectAll(String id);
 	
 	//収支履歴検索
 	List<PaymentInfo> searchPaymentData (PaymentSearchRequest req);
 	
 	//収支履歴を削除
-	void deletePaymentData(Long id, Long seq);
+	void deletePaymentData(String id, Long seq);
 }

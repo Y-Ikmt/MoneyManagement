@@ -7,34 +7,34 @@
 <body>
 	<h1>あなたのお金情報</h1>
 	<a th:href="@{/mokuhyou(value=*{userInfo.mokuhyou})}">目標設定</a>
-	<h1><span th:text="${userInfo.userid}"></span></h1>
+	<!--<h1><span th:text="${userInfo.userid}"></span></h1>-->
 	<h1><span th:text="${userInfo.name}"></span></h1>
-	<h1><span th:text="${userInfo.password}"></span></h1>
+	<!--<h1><span th:text="${userInfo.password}"></span></h1>-->
 	<h1><span th:text="${userInfo.shojikin}"></span>/<span th:text="${userInfo.mokuhyou}"></span></h1>
 
 	<a th:href="@{/history}" th:text="履歴">履歴</a>
 
-    <form th:action="@{/increase}" method="post">
-        <div>
+    <table>
+        <tr th:if="${validationError}" th:each="error : ${validationError}">
+            <td style="color: red;" th:text="${error}"></td>
+        </tr>
+    </table>
+    
+    <form th:action="@{/increase}" th:object="${paymentAddRequest}" method="post">
+
 			<label>いくら？</label>
-            <input type="text" name="money"/>
-        </div>
-        <div>
-			<label>理由は？</label>
-            <input type="text" name="reason"/>
-        </div>
+            <input type="number" name="money" th:field="*{money}">
         <br />
-        <div>
+			<label>理由は？</label>
+            <input type="text" name="reason" th:field="*{reason}">
+        <br />
 			<label>どっち？</label>
-			<select name="kbn">
+			<select name="kbn" th:field="*{kbn}">
 			<option value="up">増えた</option>
 			<option value="down">減った</option>
 			</select>
-        </div>
         <br />
-        <div>
             <input type="submit" value="反映"/>
-        </div>
         <br />
     </form>
 </body>

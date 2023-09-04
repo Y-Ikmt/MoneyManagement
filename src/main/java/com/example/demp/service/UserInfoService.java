@@ -12,11 +12,12 @@ public class UserInfoService {
 	@Autowired
 	UserInfoMapper userInfoMapper;
 	
-	public UserInfo findUserData(Long id) {
+	public UserInfo findUserData(String id) {
 		return userInfoMapper.findUserData(id);
 	}
 	
-	public void increase(Long id, int money, String kbn) {
+	
+	public void increase(String id, int money, String kbn) {
 		
 		//区分が"down"なら-1をかけてマイナスにする。
 		if(kbn.equals("down")) {

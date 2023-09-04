@@ -19,7 +19,7 @@ public class PaymentService {
 		return paymentMapper.findUserData(id);
 	}*/
 	
-	public void insert(Long id, int money, String reason, String kbn) {
+	public void insert(String id, int money, String reason, String kbn) {
 		
 		//区分が"down"なら-1をかけてマイナスにする。
 		if(kbn.equals("down")) {
@@ -29,13 +29,13 @@ public class PaymentService {
 		paymentMapper.insert(id, money, reason);
 	}
 	
-	public List<PaymentInfo> findPaymentData(Long id) {
+	public List<PaymentInfo> findPaymentData(String id) {
 		return paymentMapper.selectAll(id);
 		
 	}
 	
 	//収支履歴を検索
-	public List<PaymentInfo> searchPaymentData(Long id,PaymentSearchRequest req) {
+	public List<PaymentInfo> searchPaymentData(String id,PaymentSearchRequest req) {
 		req.setUserId(id);
 		System.out.println("id:"+req.getUserId()+" minusFlg:" + req.getMinusFlg() + " plusFlg:" + req.getPlusFlg());
 		return paymentMapper.searchPaymentData(req);
@@ -43,7 +43,7 @@ public class PaymentService {
 	}
 	
 	//収支履歴を削除
-	public void deletePaymentData(Long id, Long seq) {
+	public void deletePaymentData(String id, Long seq) {
 		paymentMapper.deletePaymentData(id, seq);
 	}
 }

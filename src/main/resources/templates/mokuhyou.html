@@ -7,9 +7,15 @@
 <body>
 	<h1>目標設定</h1>
 	<a th:href="@{/}">TOPへ</a>
+	
+    <table>
+        <tr th:if="${validationError}" th:each="error : ${validationError}">
+            <td style="color: red;" th:text="${error}"></td>
+        </tr>
+    </table>
 	<div>
 		<form th:action="@{/mokuhyouSet}" th:object="${mokuhyouSetRequest}" method="post">
-			<input type="number" name="mokuhyou" th:value="*{nowMokuhyou}">
+			<input type="number" name="mokuhyou" th:field="*{nowMokuhyou}">
 
 			<br/>
 			<input type="submit" value="目標設定"/>

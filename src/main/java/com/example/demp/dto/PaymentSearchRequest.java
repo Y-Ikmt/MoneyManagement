@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class PaymentSearchRequest implements Serializable {
-	Long userId;
+	String userId;
 	String startDate;
 	String endDate;
 	Boolean plusFlg;

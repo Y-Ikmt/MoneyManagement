@@ -1,18 +1,24 @@
 package com.example.demp.controller;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.demp.dto.LoginRequest;
 import com.example.demp.dto.MokuhyouSetRequest;
+import com.example.demp.dto.PaymentAddRequest;
 import com.example.demp.dto.PaymentSearchRequest;
 import com.example.demp.entity.PaymentInfo;
 import com.example.demp.entity.UserInfo;
@@ -27,7 +33,7 @@ public class MainController {
 	@Autowired
 	PaymentService paymentService;
 	
-	Long id = (long) 1;
+	String id = "1";
 	
 	//検索条件保存用
 	String beforeStartDate;
@@ -39,18 +45,30 @@ public class MainController {
 		
 		UserInfo userInfo = userInfoService.findUserData(id);
 		model.addAttribute("userInfo", userInfo);
+		
+		PaymentAddRequest paymentAddRequest = new PaymentAddRequest();
+		model.addAttribute("paymentAddRequest", paymentAddRequest);
 		return "index";
 	}
 	
 	//お金増加
 	@PostMapping(value = "/increase")
-	public String viewIncrease(@RequestParam("money") int money, @RequestParam("reason") String reason, @RequestParam("kbn") String kbn,Model model) {
-		System.out.println(money);
-		System.out.println(kbn);
-		System.out.println(reason);
+	public String viewIncrease(@Validated @ModelAttribute PaymentAddRequest paymentAddRequest, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            List<String> errorList = new ArrayList<String>();
+            for (ObjectError error : result.getAllErrors()) {
+                errorList.add(error.getDefaultMessage());
+            }
+
+    		UserInfo userInfo = userInfoService.findUserData(id);
+    		model.addAttribute("userInfo", userInfo);
+            model.addAttribute("validationError", errorList);
+    		model.addAttribute("paymentAddRequest", paymentAddRequest);
+            return "index";
+        }
 		
-		userInfoService.increase(id, money,kbn);
-		paymentService.insert(id, money,reason,kbn);
+		userInfoService.increase(id, paymentAddRequest.getMoney(),paymentAddRequest.getKbn());
+		paymentService.insert(id, paymentAddRequest.getMoney(),paymentAddRequest.getReason(),paymentAddRequest.getKbn());
 		
 		UserInfo userInfo = userInfoService.findUserData(id);
 		model.addAttribute("userInfo", userInfo);
@@ -109,7 +127,7 @@ public class MainController {
 	
 	//収支履歴検索実行
 	@GetMapping(value = "/paymentDelete")
-	public String deletePayment(@RequestParam("value1") Long userId, @RequestParam("value2") Long seq , Model model) {
+	public String deletePayment(@RequestParam("value1") String userId, @RequestParam("value2") Long seq , Model model) {
 		System.out.println("deletePayment");
 		System.out.println(userId);
 		System.out.println(seq);
@@ -144,10 +162,50 @@ public class MainController {
 	
 	//目標金額をセット
 	@PostMapping(value = "/mokuhyouSet")
-	public String mokuhyouSet(@RequestParam Long mokuhyou, Model model) {
-		userInfoService.mokuhyouSet(mokuhyou);
+	public String mokuhyouSet(@Validated @ModelAttribute MokuhyouSetRequest mokuhyouSetRequest, BindingResult result, Model model) {
+
+        if (result.hasErrors()) {
+            List<String> errorList = new ArrayList<String>();
+            for (ObjectError error : result.getAllErrors()) {
+                errorList.add(error.getDefaultMessage());
+            }
+
+            model.addAttribute("validationError", errorList);
+            return "mokuhyou";
+        }
+		userInfoService.mokuhyouSet(mokuhyouSetRequest.getNowMokuhyou());
 		UserInfo userInfo = userInfoService.findUserData(id);
 		model.addAttribute("userInfo", userInfo);
+		PaymentAddRequest paymentAddRequest = new PaymentAddRequest();
+		model.addAttribute("paymentAddRequest", paymentAddRequest);
+		return "index";
+	}
+	
+	@GetMapping(value = "/login")
+	public String loginView(Model model) {
+		LoginRequest loginRequest = new LoginRequest();
+		model.addAttribute("loginRequest", loginRequest);
+		return "login";
+	}
+	
+	@GetMapping(value = "/loginAction")
+	public String login(@Validated @ModelAttribute LoginRequest loginRequest, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            List<String> errorList = new ArrayList<String>();
+            for (ObjectError error : result.getAllErrors()) {
+                errorList.add(error.getDefaultMessage());
+            }
+
+    		model.addAttribute("loginRequest", loginRequest);
+            return "login";
+        }
+		
+		//userInfoService.increase(id, paymentAddRequest.getMoney(),paymentAddRequest.getKbn());
+
+		
+		UserInfo userInfo = userInfoService.findUserData(loginRequest.getUserId());
+		model.addAttribute("userInfo", userInfo);
+
 		return "index";
 	}
 

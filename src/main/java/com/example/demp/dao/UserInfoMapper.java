@@ -8,10 +8,10 @@ import com.example.demp.entity.UserInfo;
 public interface UserInfoMapper {
 	
 	//ユーザー情報検索
-	UserInfo findUserData(Long id);
+	UserInfo findUserData(String id);
 	
 	//お金増やす
-	void inclease(Long id, int money);
+	void inclease(String id, int money);
 	
 	//目標を設定
 	void updateMokuhyou(Long mokuhyouKingaku);
